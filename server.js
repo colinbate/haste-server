@@ -10,7 +10,7 @@ var DocumentHandler = require('./lib/document_handler');
 // Load the configuration and set some defaults
 var config = JSON.parse(fs.readFileSync('./config.js', 'utf8'));
 config.port = process.env.PORT || config.port || 7777;
-config.host = process.env.HOST || config.host || 'localhost';
+config.host = process.env.HOST || process.env.IP || config.host || 'localhost';
 
 // Set up the logger
 if (config.logging) {
@@ -52,6 +52,7 @@ if (config.recompressStaticAssets) {
   var jsp = require("uglify-js").parser;
   var pro = require("uglify-js").uglify;
   var list = fs.readdirSync('./static');
+  var dest;
   for (var i = 0; i < list.length; i++) {
     var item = list[i];
     var orig_code, ast;
@@ -71,17 +72,18 @@ if (config.recompressStaticAssets) {
 
 // Send the static documents into the preferred store, skipping expirations
 var path, data;
-for (var name in config.documents) {
-  path = config.documents[name];
+var logSuccess = function(cb) {
+  winston.debug('loaded static document', { success: cb });
+};
+for (var dname in config.documents) {
+  path = config.documents[dname];
   data = fs.readFileSync(path, 'utf8');
-  winston.info('loading static document', { name: name, path: path });
+  winston.info('loading static document', { name: dname, path: path });
   if (data) {
-    preferredStore.set(name, data, function(cb) {
-      winston.debug('loaded static document', { success: cb });
-    }, true);
+    preferredStore.set(dname, data, logSuccess, true);
   }
   else {
-    winston.warn('failed to load static document', { name: name, path: path });
+    winston.warn('failed to load static document', { name: dname, path: path });
   }
 }
 

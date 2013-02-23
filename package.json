@@ -1,6 +1,6 @@
 {
   "name": "haste",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "Private Pastebin Server",
   "keywords": [
@@ -12,6 +12,9 @@
     "email": "john.crepezzi@gmail.com",
     "url": "http://seejohncode.com/"
   },
+  "contributors": [
+    "Colin Bate <colin@colinbate.com>"
+  ],
   "main": "haste",
   "dependencies": {
     "winston": "0.6.2",
