@@ -20,13 +20,18 @@ to do things like:
 which will output a URL to share containing the contents of `cat something`'s
 STDOUT.  Check the README there for more details and usages.
 
-## Support
+## Haste CE
 
-Please consider paying what you feel this project is worth:
+This particular fork of the project introduces some developer team features and is therefore slightly rebranded as the Collaborative Edition. I was originally going to call it Comment Edition, but I didn't want to limit my additions to just comments.
 
-<a href="https://www.stripeme.com/pay/1r2f">
-  <img alt="Pay" src="https://www.stripeme.com/pay.jpg" />
-</a>
+My intent is to keep to the major design objectives that John originally set out with, but add some features which are needed for my own use. A brief high level road map of features might be:
+
+* Ability to add comments to a paste as a whole
+* Ability to add comments to a particular line of a paste
+* Ability to highlight particular lines in a paste
+* Ability to tag a paste with categories
+
+Ideally, I don't want to add much to the interface. I'll probably replace the Twitter button with a tag icon or something.
 
 ## Tested Browsers
 
