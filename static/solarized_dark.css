@@ -98,3 +98,7 @@ pre .tex .formula,
 pre .code {
   background: #073642;
 }
+
+pre .emphasis {
+  font-style: italic;
+}

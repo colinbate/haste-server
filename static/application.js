@@ -189,16 +189,19 @@ haste.prototype.lookupTypeByExtension = function(ext) {
 // Add line numbers to the document
 // For the specified number of lines
 haste.prototype.addLineNumbers = function(lineCount) {
-  var h = '';
+  var h = '', hl = '';
   for (var i = 0; i < lineCount; i++) {
-    h += (i + 1).toString() + '<br/>';
+    h += '<div>' + (i + 1).toString() + '</div>';
+    hl += '<div></div>';
   }
   $('#linenos').html(h);
+  $('#line-highlights').html(hl);
 };
 
 // Remove the line numbers
 haste.prototype.removeLineNumbers = function() {
   $('#linenos').html('&gt;');
+  $('#line-highlights').html('');
 };
 
 // Load a document and show it

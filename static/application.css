@@ -33,6 +33,26 @@ textarea {
 	text-align: right;
 }
 
+/* line highlights */
+
+#line-highlights {
+	position: absolute;
+	z-index: -2000;
+	top: 20px;
+	left: 0px;
+	width: 100%;
+	font-size: 13px;
+	font-family: monospace;
+}
+
+#line-highlights div.h {
+	background-color: #103b46;
+}
+
+#line-highlights div:before {
+	content: '\00A0';
+}
+
 /* code box when locked */
 
 #box {
