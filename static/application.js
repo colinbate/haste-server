@@ -191,8 +191,8 @@ haste.prototype.lookupTypeByExtension = function(ext) {
 haste.prototype.addLineNumbers = function(lineCount) {
   var h = '', hl = '';
   for (var i = 0; i < lineCount; i++) {
-    h += '<div>' + (i + 1).toString() + '</div>';
-    hl += '<div></div>';
+    h += '<div>' + (i + 1).toString() + '</div>\n';
+    hl += '<div></div>\n';
   }
   $('#linenos').html(h);
   $('#line-highlights').html(hl);
@@ -202,6 +202,30 @@ haste.prototype.addLineNumbers = function(lineCount) {
 haste.prototype.removeLineNumbers = function() {
   $('#linenos').html('&gt;');
   $('#line-highlights').html('');
+};
+
+var insertLine = function ($el, line, value) {
+  var doc = $el.html().split('\n');
+  doc.splice(line - 1, 0, value);
+  $el.html(doc.join('\n'));
+};
+
+var removeLine = function ($el, line) {
+  var doc = $el.html().split('\n');
+  doc.splice(line - 1, 1);
+  $el.html(doc.join('\n'));
+};
+
+haste.prototype.insertBlankLine = function (line) {
+  insertLine($('code'), line, '');
+  insertLine($('#linenos'), line, '<div>&nbsp;</div>');
+  insertLine($('#line-highlights'), line, '<div></div>');
+};
+
+haste.prototype.removeLine = function (line) {
+  removeLine($('code'), line);
+  removeLine($('#linenos'), line);
+  removeLine($('#line-highlights'), line);
 };
 
 // Load a document and show it
@@ -383,6 +407,7 @@ haste.prototype.configureShortcuts = function() {
 	// Construct app and load initial path
 	$(function() {
 		app = new haste('hastebin ce', { twitter: false });
+    window.hasteapp = app;
 		handlePop({ target: window });
 	});
 }());
