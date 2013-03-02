@@ -1,7 +1,20 @@
 body {
 	background: #002B36;
-	padding: 20px 50px;
+	padding: 20px 50px 20px 52px;
 	margin: 0;
+	position: relative;
+}
+
+body.n1 {
+	padding-left: 44px;
+}
+
+body.n100 {
+	padding-left: 60px;
+}
+
+body.n1000 {
+	padding-left: 68px;
 }
 
 /* textarea */
@@ -19,25 +32,58 @@ textarea {
 	font-size: 13px;
 }
 
+/* the gutter */
+
+#gutter {
+	background-color: #103b46;
+	border-right: 1px solid #306b76;
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 43px;
+}
+
+.n1 #gutter {
+	width: 35px;
+}
+
+.n100 #gutter {
+	width: 51px;
+}
+
+.n1000 #gutter {
+	width: 59px;
+}
+
 /* the line numbers */
 
 #linenos {
-  color: #7d7d7d;
-	z-index: -1000;
+	color: #7d7d7d;
 	position: absolute;
 	top: 20px;
 	left: 0;
-	width: 30px; /* 30 to get 20 away from box */
+	width: 100%;
 	font-size: 13px;
 	font-family: monospace;
 	text-align: right;
+}
+
+#linenos div {
+	padding-right: 15px;
+	margin-right: 5px;
+	cursor: pointer;
+}
+
+#linenos div.commented {
+	background: url(comment-light.png) right center no-repeat;
 }
 
 /* line highlights */
 
 #line-highlights {
 	position: absolute;
-	z-index: -2000;
+	z-index: -20;
 	top: 20px;
 	left: 0;
 	width: 100%;
@@ -61,19 +107,57 @@ textarea {
 	background-color: black;
 	width: 100%;
 	left: 0;
+	color: #fff;
 }
 
 #comment-input input {
 	background-color: transparent;
 	border: 0;
-	color: #fff;
-	font-size: 13px;
-	font-family: monospace;
 	padding: 0;
+	color: #fff;
 	margin: 0;
 	resize: none;
-	margin-left: 50px;
 	width: 100%;
+	font-size: 13px;
+	font-family: monospace;
+}
+
+#comment-input span {
+	color: #fff;
+	position: absolute;
+	left: 0;
+	height: 13px;
+	width: 38px;
+	text-align: right;
+	background: url(comment-light.png) right center no-repeat;
+}
+
+.n1 #comment-input span {
+	width: 30px;
+}
+
+.n100 #comment-input span {
+	width: 46px;
+}
+
+.n1000 #comment-input span {
+	width: 54px;
+}
+
+#comment-input .cwrap {
+	padding-left: 52px;
+}
+
+.n1 #comment-input .cwrap {
+	padding-left: 44px;
+}
+
+.n100 #comment-input .cwrap {
+	padding-left: 60px;
+}
+
+.n1000 #comment-input .cwrap {
+	padding-left: 68px;
 }
 
 #comment-input input:focus {
@@ -85,11 +169,10 @@ textarea {
 #box {
 	padding: 0;
 	margin: 0;
-	width: 100%;
 	border: 0;
 	outline: none;
 	font-size: 13px;
-	padding-right: 360px;
+	padding-right: 200px;
 }
 
 #box code {

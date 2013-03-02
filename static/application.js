@@ -218,8 +218,10 @@ var removeLine = function ($el, line) {
 
 haste.prototype.insertBlankLine = function (line) {
   insertLine($('code'), line, '');
-  insertLine($('#linenos'), line, '<div>&nbsp;</div>');
+  insertLine($('#linenos'), line, '<div class="blank">&nbsp;</div>');
   insertLine($('#line-highlights'), line, '<div></div>');
+  var pos = $('#linenos .blank').offset();
+  return pos && pos.top || 0;
 };
 
 haste.prototype.removeLine = function (line) {
@@ -414,7 +416,48 @@ haste.prototype.configureShortcuts = function() {
 
 ///// Tab behavior in the textarea - 2 spaces per tab
 $(function() {
-
+  var linenumParse = /^\s*:(\d+)\s+/;
+  var openLine = -1;
+  var $newcomment = $('#comment-input');
+  var $newcommenticon = $('#comment-input span');
+  var setCommentPos = function (top) {
+    if (top) {
+      $newcomment.css({top: top + 'px'});
+      $newcommenticon.css({top: '16px'});
+    } else {
+      $newcomment.css({top: 0});
+      $newcommenticon.css({top: 0});
+    }
+  }
+  $('input#new-comment').keyup(function (e) {
+    var line, top;
+    var cmt = this.value;
+    var matches = linenumParse.exec(cmt);
+    if (matches) {
+      // Line specific comment
+      line = matches[1];
+      if (openLine === -1) {
+        openLine = line * 1;
+        top = window.hasteapp.insertBlankLine(openLine);
+        setCommentPos(top);
+      } else if (openLine !== line * 1) {
+        window.hasteapp.removeLine(openLine);
+        openLine = line * 1;
+        setCommentPos(0);
+      }
+    } else {
+      // General comment
+      if (openLine >= 0) {
+        window.hasteapp.removeLine(openLine);
+        openLine = -1;
+        setCommentPos(0);
+      }
+    }
+  });
+  $('#linenos').on('click', 'div', function (e) {
+    var line = this.textContent;
+    console.log('Clicked in the gutter on line ' + line);
+  });
   $('textarea').keydown(function(evt) {
     var sel;
     if (evt.keyCode === 9) {

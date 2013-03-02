@@ -7,7 +7,7 @@
 
   "maxLength": 400000,
 
-  "staticMaxAge": 86400,
+  "staticMaxAge": 0,
 
   "recompressStaticAssets": true,
 
