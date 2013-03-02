@@ -101,6 +101,7 @@ var documentHandler = new DocumentHandler({
   keyGenerator: keyGenerator
 });
 
+
 // Set the server up with a static cache
 connect.createServer(
   // First look for api calls
@@ -139,4 +140,4 @@ connect.createServer(
   connect.static(__dirname + '/static', { maxAge: config.staticMaxAge })
 ).listen(config.port, config.host);
 
-winston.info('listening on ' + config.host + ':' + config.port);
+winston.info('process ' + process.pid + ' listening on ' + config.host + ':' + config.port);

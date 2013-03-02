@@ -108,6 +108,7 @@ textarea {
 	width: 100%;
 	left: 0;
 	color: #fff;
+	display: none;
 }
 
 #comment-input input {
@@ -275,9 +276,9 @@ textarea {
 #box2 .function.enabled.raw { background-position: -116px center; }
 #box2 .function.enabled.raw:hover { background-position: -116px bottom; }
 
-#box2 .function.twitter { background-position: -153px top; }
-#box2 .function.enabled.twitter { background-position: -153px center; }
-#box2 .function.enabled.twitter:hover { background-position: -153px bottom; }
+#box2 .function.comment { background-position: -153px top; }
+#box2 .function.enabled.comment { background-position: -153px center; }
+#box2 .function.enabled.comment:hover { background-position: -153px bottom; }
 
 #messages {
 	position:fixed;

@@ -124,7 +124,7 @@ haste.prototype.lightKey = function() {
 
 // Show the full key
 haste.prototype.fullKey = function() {
-  this.configureKey(['new', 'duplicate', 'twitter', 'raw']);
+  this.configureKey(['new', 'duplicate', 'comment', 'raw']);
 };
 
 // Set the key up for certain things to be enabled
@@ -204,6 +204,8 @@ haste.prototype.removeLineNumbers = function() {
   $('#line-highlights').html('');
 };
 
+// Comment related
+
 var insertLine = function ($el, line, value) {
   var doc = $el.html().split('\n');
   doc.splice(line - 1, 0, value);
@@ -228,6 +230,21 @@ haste.prototype.removeLine = function (line) {
   removeLine($('code'), line);
   removeLine($('#linenos'), line);
   removeLine($('#line-highlights'), line);
+};
+
+haste.prototype.showNewComment = function (line) {
+  var $input = $('#comment-input input');
+  if (line) {
+    $input.val(':' + line + ' ').keyup();
+  }
+  $('#comment-input').fadeIn('fast', function () {
+    $input.focus();
+  });
+};
+
+haste.prototype.dismissNewComment = function () {
+  $('input#new-comment').val('').keyup();
+  $('#comment-input').hide();
 };
 
 // Load a document and show it
@@ -343,6 +360,26 @@ haste.prototype.configureButtons = function() {
       action: function() {
         window.open('https://twitter.com/share?url=' + encodeURI(window.location.href));
       }
+    },
+    {
+      $where: $('#box2 .comment'),
+      label: 'Comment',
+      shortcut: function(evt) {
+        return _this.doc.locked && evt.shiftKey && evt.ctrlKey && evt.keyCode == 77;
+      },
+      shortcutDescription: 'control + shift + m',
+      action: function() {
+        _this.showNewComment();
+      }
+    },
+    {
+      $where: undefined,
+      shortcut: function (evt) {
+        return _this.doc.locked && evt.keyCode == 27;
+      },
+      action: function () {
+        _this.dismissNewComment();
+      }
     }
   ];
   for (var i = 0; i < this.buttons.length; i++) {
@@ -351,6 +388,9 @@ haste.prototype.configureButtons = function() {
 };
 
 haste.prototype.configureButton = function(options) {
+  if (options.$where === undefined) {
+    return;
+  }
   // Handle the click action
   options.$where.click(function(evt) {
     evt.preventDefault();
@@ -456,7 +496,7 @@ $(function() {
   });
   $('#linenos').on('click', 'div', function (e) {
     var line = this.textContent;
-    console.log('Clicked in the gutter on line ' + line);
+    window.hasteapp.showNewComment(line);
   });
   $('textarea').keydown(function(evt) {
     var sel;
