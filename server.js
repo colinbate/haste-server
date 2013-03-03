@@ -138,6 +138,6 @@ connect.createServer(
     });
   }),
   connect.static(__dirname + '/static', { maxAge: config.staticMaxAge })
-).listen(config.port, config.host);
+).listen(process.env.PORT || config.port || 8080, process.env.IP || config.host || '0.0.0.0');
 
 winston.info('process ' + process.pid + ' listening on ' + config.host + ':' + config.port);

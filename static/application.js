@@ -204,6 +204,20 @@ haste.prototype.removeLineNumbers = function() {
   $('#line-highlights').html('');
 };
 
+// Highlight related
+
+haste.prototype.highlightLine = function (line) {
+  $('#line-highlights div').eq(line - 1).addClass('h');
+};
+
+haste.prototype.unhighlightLine = function (line) {
+  $('#line-highlights div').eq(line - 1).removeClass('h');
+};
+
+haste.prototype.toggleHighlightLine = function (line) {
+  $('#line-highlights div').eq(line - 1).toggleClass('h');
+};
+
 // Comment related
 
 var insertLine = function ($el, line, value) {
@@ -496,7 +510,13 @@ $(function() {
   });
   $('#linenos').on('click', 'div', function (e) {
     var line = this.textContent;
-    window.hasteapp.showNewComment(line);
+    if (e.shiftKey) {
+      // Highlight
+      window.hasteapp.toggleHighlightLine(line);
+    } else {
+      // Comment
+      window.hasteapp.showNewComment(line);
+    }
   });
   $('textarea').keydown(function(evt) {
     var sel;

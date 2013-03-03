@@ -42,6 +42,7 @@ textarea {
 	left: 0;
 	height: 100%;
 	width: 43px;
+	z-index: -5;
 }
 
 .n1 #gutter {
@@ -63,10 +64,22 @@ textarea {
 	position: absolute;
 	top: 20px;
 	left: 0;
-	width: 100%;
+	width: 43px;
 	font-size: 13px;
 	font-family: monospace;
 	text-align: right;
+}
+
+.n1 #linenos {
+	width: 35px;
+}
+
+.n100 #linenos {
+	width: 51px;
+}
+
+.n1000 #linenos {
+	width: 59px;
 }
 
 #linenos div {
@@ -83,7 +96,7 @@ textarea {
 
 #line-highlights {
 	position: absolute;
-	z-index: -20;
+	z-index: -1;
 	top: 20px;
 	left: 0;
 	width: 100%;
@@ -92,7 +105,7 @@ textarea {
 }
 
 #line-highlights div.h {
-	background-color: #103b46;
+	background-color: #441;
 }
 
 #line-highlights div:before {
@@ -174,11 +187,13 @@ textarea {
 	outline: none;
 	font-size: 13px;
 	padding-right: 200px;
+	z-index: 4;
 }
 
 #box code {
 	padding: 0;
 	background: transparent !important; /* don't hide hastebox */
+	z-index: 5;
 }
 
 /* key */
