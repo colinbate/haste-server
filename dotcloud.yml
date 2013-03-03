@@ -1,7 +1,7 @@
 www:
-	type: nodejs
-	approot: .
-	config:
-		node_version: v0.8.x
-	processes:
-		app: node server.js
+  type: nodejs
+  approot: .
+  config:
+    node_version: v0.8.x
+  processes:
+    app: node server.js
