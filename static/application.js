@@ -85,6 +85,55 @@ haste_document.prototype.save = function(data, callback) {
   });
 };
 
+// Represent the haste metadata
+
+var haste_metadata = function () {
+  this.data = {
+    comments: {},
+    highlight: {}
+  };
+};
+
+haste_metadata.prototype.saveComment = function (line, comment) {
+  if (line && comment) {
+    this.data.comments[line.toString()];
+  }
+};
+
+haste_metadata.prototype.removeComment = function (line) {
+  if (line && this.data.comments[line.toString()]) {
+    delete this.data.comments[line.toString()];
+  }
+};
+
+haste_metadata.prototype.clearComments = function () {
+  this.data.comments = {};
+};
+
+haste_metadata.prototype.highlight = function (line) {
+  if (line) {
+    this.data.highlight[line.toString()] = true;
+  }
+};
+
+haste_metadata.prototype.unhighlight = function (line) {
+  if (line && this.data.highlight[line.toString()]) {
+    delete this.data.highlight[line.toString()]
+  }
+};
+
+haste_metadata.prototype.clearHighlight = function () {
+  this.data.highlight = {};
+};
+
+haste_metadata.prototype.serialize = function () {
+  
+};
+
+haste_metadata.prototype.unserialize = function (json) {
+  
+};
+
 ///// represents the paste application
 
 var haste = function(appName, options) {
@@ -94,6 +143,7 @@ var haste = function(appName, options) {
   this.$code = $('#box code');
   this.$linenos = $('#linenos');
   this.options = options;
+  this.commenting = false;
   this.configureShortcuts();
   this.configureButtons();
   // If twitter is disabled, hide the button
@@ -254,9 +304,11 @@ haste.prototype.showNewComment = function (line) {
   $('#comment-input').fadeIn('fast', function () {
     $input.focus();
   });
+  this.commenting = true;
 };
 
 haste.prototype.dismissNewComment = function () {
+  this.commenting = false;
   $('input#new-comment').val('').keyup();
   $('#comment-input').hide();
 };
