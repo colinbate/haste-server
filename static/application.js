@@ -1,3 +1,5 @@
+/*jshint browser:true */
+/*global $:false, jQuery:false, hljs:false */
 ///// represents a single document
 
 var haste_document = function() {
@@ -20,11 +22,11 @@ haste_document.prototype.load = function(key, callback, lang) {
     type: 'get',
     dataType: 'json',
     success: function(res) {
+      var high;
       _this.locked = true;
       _this.key = key;
       _this.data = res.data;
       try {
-        var high;
         if (lang === 'txt') {
           high = { value: _this.htmlEscape(res.data) };
         }
@@ -45,7 +47,7 @@ haste_document.prototype.load = function(key, callback, lang) {
         lineCount: res.data.split("\n").length
       });
     },
-    error: function(err) {
+    error: function() {
       callback(false);
     }
   });
@@ -94,46 +96,77 @@ var haste_metadata = function () {
   };
 };
 
-haste_metadata.prototype.saveComment = function (line, comment) {
-  if (line && comment) {
-    this.data.comments[line.toString()];
-  }
-};
+(function () {
+  var numericSort = function (a, b) {
+    return a - b;
+  };
+  var collectHighlights = function (highlight) {
+    var hlArray = [],
+        tempArray = [],
+        lastLine = -1,
+        curr = 0;
+    for (var line in highlight) {
+      if (highlight.hasOwnProperty(line) && highlight[line]) {
+        tempArray.push(line);
+      }
+    }
+    tempArray.sort(numericSort);
+    for (var i = 0; i < tempArray.length; i+=1) {
+      curr = tempArray[i] * 1;
+      if (curr !== lastLine + 1) {
+        hlArray.push(curr);
+      } else {
+        if (hlArray[hlArray.length-1][1]) {
+          hlArray[hlArray.length-1][1] = curr;
+        } else {
+          hlArray.push([hlArray.pop(), curr]);
+        }
+      }
+      lastLine = curr;
+    }
+    return hlArray;
+  };
 
-haste_metadata.prototype.removeComment = function (line) {
-  if (line && this.data.comments[line.toString()]) {
-    delete this.data.comments[line.toString()];
-  }
-};
+  haste_metadata.prototype.saveComment = function (line, comment) {
+    if (line && comment) {
+      this.data.comments[line.toString()] = comment;
+    }
+  };
 
-haste_metadata.prototype.clearComments = function () {
-  this.data.comments = {};
-};
+  haste_metadata.prototype.removeComment = function (line) {
+    if (line && this.data.comments[line.toString()]) {
+      delete this.data.comments[line.toString()];
+    }
+  };
 
-haste_metadata.prototype.highlight = function (line) {
-  if (line) {
-    this.data.highlight[line.toString()] = true;
-  }
-};
+  haste_metadata.prototype.clearComments = function () {
+    this.data.comments = {};
+  };
 
-haste_metadata.prototype.unhighlight = function (line) {
-  if (line && this.data.highlight[line.toString()]) {
-    delete this.data.highlight[line.toString()]
-  }
-};
+  haste_metadata.prototype.highlight = function (line) {
+    if (line) {
+      this.data.highlight[line.toString()] = true;
+    }
+  };
 
-haste_metadata.prototype.clearHighlight = function () {
-  this.data.highlight = {};
-};
+  haste_metadata.prototype.unhighlight = function (line) {
+    if (line && this.data.highlight[line.toString()]) {
+      delete this.data.highlight[line.toString()];
+    }
+  };
 
-haste_metadata.prototype.serialize = function () {
-  
-};
+  haste_metadata.prototype.clearHighlight = function () {
+    this.data.highlight = {};
+  };
 
-haste_metadata.prototype.unserialize = function (json) {
-  
-};
-
+  haste_metadata.prototype.serialize = function () {
+    var out = {
+      comments: this.data.comments,
+      highlight: collectHighlights(this.data.highlight)
+    };
+    return JSON.stringify(out);
+  };
+}());
 ///// represents the paste application
 
 var haste = function(appName, options) {
@@ -387,7 +420,7 @@ haste.prototype.configureButtons = function() {
       $where: $('#box2 .new'),
       label: 'New',
       shortcut: function(evt) {
-        return evt.ctrlKey && evt.keyCode === 78  
+        return evt.ctrlKey && evt.keyCode === 78;
       },
       shortcutDescription: 'control + n',
       action: function() {
@@ -465,14 +498,14 @@ haste.prototype.configureButton = function(options) {
     }
   });
   // Show the label
-  options.$where.mouseenter(function(evt) {
+  options.$where.mouseenter(function(/*evt*/) {
     $('#box3 .label').text(options.label);
     $('#box3 .shortcut').text(options.shortcutDescription || '');
     $('#box3').show();
     $(this).append($('#pointer').remove().show());
   });
   // Hide the label
-  options.$where.mouseleave(function(evt) {
+  options.$where.mouseleave(function(/*evt*/) {
     $('#box3').hide();
     $('#pointer').hide();
   });
@@ -534,8 +567,8 @@ $(function() {
       $newcomment.css({top: 0});
       $newcommenticon.css({top: 0});
     }
-  }
-  $('input#new-comment').keyup(function (e) {
+  };
+  $('input#new-comment').keyup(function () {
     var line, top;
     var cmt = this.value;
     var matches = linenumParse.exec(cmt);
